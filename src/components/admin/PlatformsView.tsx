@@ -78,7 +78,7 @@ export default function PlatformsView() {
       ) : (
         <div className="space-y-4">
           {platforms.map((p) => (
-            <PlatformCard key={p.id} platform={p} onChanged={load} />
+            <PlatformCard key={p.id} platform={p} onChanged={load} onError={setError} />
           ))}
         </div>
       )}
@@ -86,7 +86,15 @@ export default function PlatformsView() {
   );
 }
 
-function PlatformCard({ platform, onChanged }: { platform: Platform; onChanged: () => void }) {
+function PlatformCard({
+  platform,
+  onChanged,
+  onError,
+}: {
+  platform: Platform;
+  onChanged: () => void;
+  onError: (msg: string | null) => void;
+}) {
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(platform.name);
   const [desc, setDesc] = useState(platform.description ?? "");
@@ -125,6 +133,25 @@ function PlatformCard({ platform, onChanged }: { platform: Platform; onChanged: 
     try {
       await api.patch(`/api/platforms/${platform.id}/active?active=${!platform.active}`);
       onChanged();
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const deletePlatform = async () => {
+    if (
+      !confirm(
+        `Delete "${platform.name}"? This permanently removes the platform and its categories. This cannot be undone.`
+      )
+    )
+      return;
+    setBusy(true);
+    onError(null);
+    try {
+      await api.del(`/api/platforms/${platform.id}`);
+      onChanged();
+    } catch (err) {
+      onError(err instanceof ApiError ? err.message : "Unable to delete platform.");
     } finally {
       setBusy(false);
     }
@@ -188,6 +215,16 @@ function PlatformCard({ platform, onChanged }: { platform: Platform; onChanged: 
               <Button type="button" size="sm" variant="outline" onClick={toggleExpand}>
                 Categories {expanded ? "▲" : "▼"}
               </Button>
+              {!platform.additional && (
+                <button
+                  type="button"
+                  onClick={deletePlatform}
+                  disabled={busy}
+                  className="rounded-xl border border-error-300 px-4 py-3 text-sm font-medium text-error-600 transition hover:bg-error-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-error-500/30 dark:text-error-400 dark:hover:bg-error-500/10"
+                >
+                  Delete
+                </button>
+              )}
             </>
           )}
         </div>
