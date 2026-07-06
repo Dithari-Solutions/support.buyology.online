@@ -64,7 +64,7 @@ export default function TicketDetailView({ ticketId }: { ticketId: number }) {
         <p className="text-gray-600 dark:text-gray-300">
           This ticket doesn&apos;t exist or you don&apos;t have access to it.
         </p>
-        <Link href="/tickets" className="mt-3 inline-block text-brand-500 hover:text-brand-600">
+        <Link href="/tickets" className="mt-3 inline-block text-accent-600 hover:text-accent-500 dark:text-accent-400 dark:hover:text-accent-300">
           ← Back to tickets
         </Link>
       </div>
@@ -73,7 +73,7 @@ export default function TicketDetailView({ ticketId }: { ticketId: number }) {
   return (
     <div className="space-y-6">
       <div>
-        <Link href="/tickets" className="text-sm text-brand-500 hover:text-brand-600">
+        <Link href="/tickets" className="text-sm text-accent-600 hover:text-accent-500 dark:text-accent-400 dark:hover:text-accent-300">
           ← Back to tickets
         </Link>
       </div>
@@ -82,7 +82,7 @@ export default function TicketDetailView({ ticketId }: { ticketId: number }) {
       <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <p className="text-xs font-medium text-gray-400">{ticket.ticketNumber}</p>
+            <p className="font-mono text-xs font-medium text-accent-600 dark:text-accent-400/80">{ticket.ticketNumber}</p>
             <h1 className="mt-1 text-xl font-semibold text-gray-800 dark:text-white/90">
               {ticket.subject}
             </h1>
@@ -112,7 +112,7 @@ export default function TicketDetailView({ ticketId }: { ticketId: number }) {
         </div>
 
         {ticket.resolutionNote && (
-          <div className="mt-4 rounded-lg bg-gray-50 p-4 dark:bg-white/[0.03]">
+          <div className="mt-4 rounded-xl bg-gray-50 p-4 dark:bg-white/[0.03]">
             <p className="text-xs font-semibold uppercase text-gray-400">Resolution note</p>
             <p className="mt-1 whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300">
               {ticket.resolutionNote}
@@ -330,7 +330,7 @@ function Conversation({
                 type="checkbox"
                 checked={internal}
                 onChange={(e) => setInternal(e.target.checked)}
-                className="h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500"
+                className="h-4 w-4 rounded border-gray-300 text-accent-500 focus:ring-accent-500"
               />
               Internal note (hidden from the requester)
             </label>
@@ -391,13 +391,13 @@ function Attachments({ ticket, onAdded }: { ticket: TicketDetail; onAdded: () =>
         {ticket.attachments.map((a) => (
           <li
             key={a.id}
-            className="flex items-center justify-between rounded-lg border border-gray-100 px-4 py-2.5 text-sm dark:border-gray-800"
+            className="flex items-center justify-between rounded-xl border border-gray-100 px-4 py-2.5 text-sm dark:border-gray-800"
           >
             <div className="min-w-0">
               <button
                 type="button"
                 onClick={() => download(a.id, a.originalFilename)}
-                className="truncate font-medium text-brand-500 hover:text-brand-600"
+                className="truncate font-medium text-accent-600 hover:text-accent-500 dark:text-accent-400 dark:hover:text-accent-300"
               >
                 {a.originalFilename}
               </button>
@@ -417,7 +417,7 @@ function Attachments({ ticket, onAdded }: { ticket: TicketDetail; onAdded: () =>
           multiple
           disabled={busy}
           onChange={upload}
-          className="block w-full text-sm text-gray-500 file:mr-4 file:rounded-lg file:border-0 file:bg-brand-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-brand-700 hover:file:bg-brand-100 dark:text-gray-400 dark:file:bg-brand-500/10 dark:file:text-brand-300"
+          className="block w-full text-sm text-gray-500 file:mr-4 file:rounded-xl file:border-0 file:bg-accent-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-accent-700 hover:file:bg-accent-100 dark:text-gray-400 dark:file:bg-accent-500/10 dark:file:text-accent-300"
         />
       </div>
     </div>
@@ -433,7 +433,7 @@ function StatusHistoryPanel({ ticket }: { ticket: TicketDetail }) {
       <ol className="relative space-y-5 border-l border-gray-200 pl-5 dark:border-gray-700">
         {ticket.statusHistory.map((h) => (
           <li key={h.id} className="relative">
-            <span className="absolute -left-[26px] top-1 h-3 w-3 rounded-full bg-brand-500" />
+            <span className="absolute -left-[26px] top-1 h-3 w-3 rounded-full bg-accent-500" />
             <div className="flex items-center gap-2">
               {h.fromStatus && (
                 <Badge tone={ticketStatusTone(h.fromStatus)}>

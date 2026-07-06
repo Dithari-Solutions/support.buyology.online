@@ -57,7 +57,7 @@ export default function ResetPasswordForm() {
             <FormAlert type="success" message="Your password has been reset successfully." />
             <Link
               href="/signin"
-              className="text-sm font-medium text-brand-500 hover:text-brand-600 dark:text-brand-400"
+              className="text-sm font-medium text-accent-500 hover:text-accent-400 dark:text-accent-400 dark:hover:text-accent-300"
             >
               Continue to sign in
             </Link>

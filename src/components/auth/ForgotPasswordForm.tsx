@@ -54,7 +54,7 @@ export default function ForgotPasswordForm() {
                 </Label>
                 <Input
                   type="email"
-                  placeholder="name.surname@aztu.edu.az"
+                  placeholder="name.surname@buyology.online"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -67,7 +67,7 @@ export default function ForgotPasswordForm() {
         )}
 
         <p className="mt-6 text-center text-sm text-gray-700 dark:text-gray-400">
-          <Link href="/signin" className="text-brand-500 hover:text-brand-600 dark:text-brand-400">
+          <Link href="/signin" className="text-accent-500 hover:text-accent-400 dark:text-accent-400 dark:hover:text-accent-300">
             Back to sign in
           </Link>
         </p>

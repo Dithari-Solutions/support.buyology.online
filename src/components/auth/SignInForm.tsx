@@ -40,7 +40,7 @@ export default function SignInForm() {
             Sign In
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            Enter your AzTU email and password to access the support portal.
+            Enter your Buyology email and password to access the support portal.
           </p>
         </div>
 
@@ -54,7 +54,7 @@ export default function SignInForm() {
               </Label>
               <Input
                 type="email"
-                placeholder="name.surname@aztu.edu.az"
+                placeholder="name.surname@buyology.online"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -87,7 +87,7 @@ export default function SignInForm() {
             <div className="flex items-center justify-end">
               <Link
                 href="/forgot-password"
-                className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
+                className="text-sm text-accent-500 hover:text-accent-400 dark:text-accent-400 dark:hover:text-accent-300"
               >
                 Forgot password?
               </Link>
@@ -98,13 +98,6 @@ export default function SignInForm() {
             </Button>
           </div>
         </form>
-
-        <p className="mt-6 text-center text-sm text-gray-700 dark:text-gray-400">
-          Don&apos;t have an account?{" "}
-          <Link href="/signup" className="text-brand-500 hover:text-brand-600 dark:text-brand-400">
-            Sign up
-          </Link>
-        </p>
       </div>
     </div>
   );

@@ -15,13 +15,15 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>("dark");
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    // This code will only run on the client side
-    const savedTheme = localStorage.getItem("theme") as Theme | null;
-    const initialTheme = savedTheme || "light"; // Default to light theme
+    // This code will only run on the client side.
+    // Key is versioned ("buyology-theme") so older "light" prefs are dropped
+    // and the dark developer console becomes the default for everyone.
+    const savedTheme = localStorage.getItem("buyology-theme") as Theme | null;
+    const initialTheme = savedTheme || "dark"; // Default to the dark developer console
 
     setTheme(initialTheme);
     setIsInitialized(true);
@@ -29,7 +31,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     if (isInitialized) {
-      localStorage.setItem("theme", theme);
+      localStorage.setItem("buyology-theme", theme);
       if (theme === "dark") {
         document.documentElement.classList.add("dark");
       } else {

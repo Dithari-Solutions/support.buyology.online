@@ -67,9 +67,9 @@ export default function NotificationsList() {
             setUnreadOnly(false);
             setPage(0);
           }}
-          className={`rounded-lg px-3 py-1.5 text-sm ${
+          className={`rounded-xl px-3 py-1.5 text-sm ${
             !unreadOnly
-              ? "bg-brand-500 text-white"
+              ? "bg-accent-500 text-white"
               : "border border-gray-300 text-gray-600 dark:border-gray-700 dark:text-gray-300"
           }`}
         >
@@ -80,9 +80,9 @@ export default function NotificationsList() {
             setUnreadOnly(true);
             setPage(0);
           }}
-          className={`rounded-lg px-3 py-1.5 text-sm ${
+          className={`rounded-xl px-3 py-1.5 text-sm ${
             unreadOnly
-              ? "bg-brand-500 text-white"
+              ? "bg-accent-500 text-white"
               : "border border-gray-300 text-gray-600 dark:border-gray-700 dark:text-gray-300"
           }`}
         >
@@ -104,14 +104,14 @@ export default function NotificationsList() {
                 <button
                   onClick={() => open(n)}
                   className={`flex w-full items-start gap-4 px-5 py-4 text-left hover:bg-gray-50 dark:hover:bg-white/[0.02] ${
-                    n.read ? "" : "bg-brand-25 dark:bg-brand-500/5"
+                    n.read ? "" : "bg-accent-50 dark:bg-accent-500/[0.06]"
                   }`}
                 >
                   <span className="mt-0.5 text-xl">{NOTIFICATION_ICON[n.type] ?? "🔔"}</span>
                   <div className="min-w-0 flex-1">
                     <p className="flex items-center gap-2 font-medium text-gray-800 dark:text-white/90">
                       {n.title}
-                      {!n.read && <span className="h-2 w-2 rounded-full bg-brand-500" />}
+                      {!n.read && <span className="h-2 w-2 rounded-full bg-accent-500" />}
                     </p>
                     <p className="mt-0.5 text-sm text-gray-600 dark:text-gray-300">{n.message}</p>
                     <p className="mt-1 text-xs text-gray-400">{timeAgo(n.createdAt)}</p>
@@ -132,14 +132,14 @@ export default function NotificationsList() {
             <button
               disabled={data.first}
               onClick={() => setPage((p) => Math.max(0, p - 1))}
-              className="rounded-lg border border-gray-300 px-3 py-1.5 disabled:opacity-40 dark:border-gray-700"
+              className="rounded-xl border border-gray-300 px-3 py-1.5 disabled:opacity-40 dark:border-gray-700"
             >
               Previous
             </button>
             <button
               disabled={data.last}
               onClick={() => setPage((p) => p + 1)}
-              className="rounded-lg border border-gray-300 px-3 py-1.5 disabled:opacity-40 dark:border-gray-700"
+              className="rounded-xl border border-gray-300 px-3 py-1.5 disabled:opacity-40 dark:border-gray-700"
             >
               Next
             </button>

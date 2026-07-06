@@ -136,7 +136,7 @@ export default function ApprovalsView() {
                 </div>
 
                 {rejecting === u.id && (
-                  <div className="mt-3 rounded-lg border border-error-200 bg-error-50 p-4 dark:border-error-500/30 dark:bg-error-500/10">
+                  <div className="mt-3 rounded-xl border border-error-200 bg-error-50 p-4 dark:border-error-500/30 dark:bg-error-500/10">
                     <TextArea
                       rows={2}
                       placeholder="Reason for rejection (sent to the applicant)…"

@@ -3,6 +3,7 @@ import { ThemeToggleButton } from "@/components/common/ThemeToggleButton";
 import NotificationBell from "@/components/support/NotificationBell";
 import UserMenu from "@/components/support/UserMenu";
 import { useSidebar } from "@/context/SidebarContext";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -18,11 +19,11 @@ const AppHeader: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-99999 flex w-full border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 lg:border-b">
+    <header className="sticky top-0 z-99999 flex w-full border-gray-200 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-gray-900/70 lg:border-b">
       <div className="flex grow items-center justify-between px-3 py-3 lg:px-6 lg:py-4">
         <div className="flex items-center gap-3">
           <button
-            className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 dark:border-gray-800 dark:text-gray-400 lg:h-11 lg:w-11"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 text-gray-500 transition hover:bg-gray-50 dark:border-white/10 dark:text-gray-400 dark:hover:bg-white/[0.04] lg:h-11 lg:w-11"
             onClick={handleToggle}
             aria-label="Toggle Sidebar"
           >
@@ -48,9 +49,16 @@ const AppHeader: React.FC = () => {
           </button>
 
           <Link href="/" className="flex items-center gap-2 lg:hidden">
+            <Image
+              src="/images/logo/buyology-mark.png"
+              alt="Buyology"
+              width={32}
+              height={32}
+              className="h-8 w-8 rounded-lg object-contain"
+            />
             <span className="text-lg font-bold">
-              <span className="text-brand-800 dark:text-white">AzTU</span>
-              <span className="text-accent-400"> Support</span>
+              <span className="text-brand-800 dark:text-white">Buyology</span>
+              <span className="text-accent-500 dark:text-accent-400"> Support</span>
             </span>
           </Link>
         </div>

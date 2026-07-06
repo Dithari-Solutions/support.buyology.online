@@ -27,7 +27,7 @@ export default function SelectField({
       value={value}
       disabled={disabled}
       onChange={(e) => onChange(e.target.value)}
-      className={`h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pr-11 text-sm shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 disabled:cursor-not-allowed disabled:opacity-60 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800 ${
+      className={`h-11 w-full appearance-none rounded-xl border border-gray-300 bg-transparent px-4 py-2.5 pr-11 text-sm shadow-theme-xs focus:border-accent-400 focus:outline-hidden focus:ring-3 focus:ring-accent-500/15 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-white/[0.02] dark:text-white/90 dark:focus:border-accent-500/60 ${
         value ? "text-gray-800 dark:text-white/90" : "text-gray-400"
       } ${className}`}
     >

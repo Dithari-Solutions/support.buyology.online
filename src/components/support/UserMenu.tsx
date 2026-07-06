@@ -37,7 +37,7 @@ export default function UserMenu() {
         onClick={() => setOpen((v) => !v)}
         className="flex items-center gap-3 rounded-full p-1 pr-2 text-left hover:bg-gray-100 dark:hover:bg-gray-800"
       >
-        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-500 text-sm font-semibold text-white">
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-accent-500 text-sm font-semibold text-white">
           {initials}
         </span>
         <span className="hidden text-left lg:block">
@@ -65,13 +65,13 @@ export default function UserMenu() {
             <Link
               href="/account"
               onClick={() => setOpen(false)}
-              className="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+              className="block rounded-xl px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
             >
               Account &amp; security
             </Link>
             <button
               onClick={doLogout}
-              className="block w-full rounded-lg px-3 py-2 text-left text-sm text-error-600 hover:bg-error-50 dark:text-error-400 dark:hover:bg-error-500/10"
+              className="block w-full rounded-xl px-3 py-2 text-left text-sm text-error-600 hover:bg-error-50 dark:text-error-400 dark:hover:bg-error-500/10"
             >
               Sign out
             </button>

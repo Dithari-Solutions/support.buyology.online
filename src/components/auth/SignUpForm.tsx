@@ -71,7 +71,7 @@ export default function SignUpForm() {
             </p>
             <Link
               href="/signin"
-              className="text-sm font-medium text-brand-500 hover:text-brand-600 dark:text-brand-400"
+              className="text-sm font-medium text-accent-500 hover:text-accent-400 dark:text-accent-400 dark:hover:text-accent-300"
             >
               Back to sign in
             </Link>
@@ -89,7 +89,7 @@ export default function SignUpForm() {
             Create your account
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            Register with your corporate <strong>@aztu.edu.az</strong> email address.
+            Register with your company <strong>@buyology.online</strong> email address.
           </p>
         </div>
 
@@ -118,7 +118,7 @@ export default function SignUpForm() {
               </Label>
               <Input
                 type="email"
-                placeholder="name.surname@aztu.edu.az"
+                placeholder="name.surname@buyology.online"
                 value={form.email}
                 onChange={set("email")}
               />
@@ -168,7 +168,7 @@ export default function SignUpForm() {
 
         <p className="mt-6 text-center text-sm text-gray-700 dark:text-gray-400">
           Already have an account?{" "}
-          <Link href="/signin" className="text-brand-500 hover:text-brand-600 dark:text-brand-400">
+          <Link href="/signin" className="text-accent-500 hover:text-accent-400 dark:text-accent-400 dark:hover:text-accent-300">
             Sign in
           </Link>
         </p>

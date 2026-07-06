@@ -202,7 +202,7 @@ function PlatformCard({ platform, onChanged }: { platform: Platform; onChanged: 
               {categories.map((c) => (
                 <li
                   key={c.id}
-                  className="flex items-center justify-between rounded-lg border border-gray-100 px-4 py-2 text-sm dark:border-gray-800"
+                  className="flex items-center justify-between rounded-xl border border-gray-100 px-4 py-2 text-sm dark:border-gray-800"
                 >
                   <span className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                     {c.name}
@@ -211,7 +211,7 @@ function PlatformCard({ platform, onChanged }: { platform: Platform; onChanged: 
                   <button
                     type="button"
                     onClick={() => toggleCategory(c)}
-                    className="text-xs text-brand-500 hover:text-brand-600"
+                    className="text-xs text-accent-600 hover:text-accent-500 dark:text-accent-400 dark:hover:text-accent-300"
                   >
                     {c.active ? "Deactivate" : "Activate"}
                   </button>

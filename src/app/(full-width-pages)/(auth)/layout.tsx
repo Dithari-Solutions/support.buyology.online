@@ -1,73 +1,69 @@
 import ThemeTogglerTwo from "@/components/common/ThemeTogglerTwo";
 import RedirectIfAuthenticated from "@/components/support/RedirectIfAuthenticated";
-import Icon3D from "@/components/support/Icon3D";
 import { ThemeProvider } from "@/context/ThemeContext";
 import Image from "next/image";
 import React from "react";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-brand-950 via-brand-900 to-brand-800">
+    <div className="relative min-h-screen overflow-hidden bg-gray-50 dark:bg-gray-950">
       <ThemeProvider>
         <RedirectIfAuthenticated />
 
-        {/* Decorative background: glow, dot grid, floating IT / software icons */}
+        {/* Simple background: faint dot grid + one soft glow behind the card */}
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute -left-24 top-10 h-72 w-72 rounded-full bg-accent-400/20 blur-3xl" />
-          <div className="absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-brand-500/25 blur-3xl" />
+          <div className="absolute left-1/2 top-1/3 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-500/[0.06] blur-3xl" />
           <div
-            className="absolute inset-0 opacity-[0.07]"
+            className="absolute inset-0 opacity-[0.05]"
             style={{
-              backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)",
-              backgroundSize: "24px 24px",
+              backgroundImage: "radial-gradient(circle, #94a3b8 1px, transparent 1px)",
+              backgroundSize: "26px 26px",
             }}
           />
-          <div className="absolute left-[7%] top-[15%] hidden sm:block">
-            <Icon3D name="code" tone="cyan" size={62} float />
-          </div>
-          <div className="absolute right-[9%] top-[12%] hidden sm:block">
-            <Icon3D name="server" tone="accent" size={56} float delay={0.8} />
-          </div>
-          <div className="absolute bottom-[14%] left-[11%] hidden sm:block">
-            <Icon3D name="database" tone="violet" size={54} float delay={0.4} />
-          </div>
-          <div className="absolute bottom-[16%] right-[10%] hidden sm:block">
-            <Icon3D name="terminal" tone="brand" size={58} float delay={1.2} />
-          </div>
-          <div className="absolute left-[44%] top-[8%] hidden lg:block">
-            <Icon3D name="branch" tone="success" size={44} float delay={0.6} />
-          </div>
-          <div className="absolute bottom-[9%] right-[28%] hidden lg:block">
-            <Icon3D name="cloud" tone="accent" size={48} float delay={1} />
-          </div>
-          <div className="absolute left-[22%] top-[44%] hidden xl:block">
-            <Icon3D name="chip" tone="cyan" size={42} float delay={0.3} />
-          </div>
-          <div className="absolute right-[19%] top-[42%] hidden xl:block">
-            <Icon3D name="bug" tone="warning" size={40} float delay={0.9} />
-          </div>
         </div>
 
         {/* Centered card */}
         <div className="relative z-10 flex min-h-screen items-center justify-center p-5">
           <div className="w-full max-w-md">
             <div className="mb-6 flex flex-col items-center text-center">
+              {/* Black wordmark in light mode, white in dark */}
               <Image
-                src="/images/logo/aztu-logo-dark.png"
-                alt="AzTU"
-                width={72}
-                height={72}
-                className="h-16 w-auto object-contain"
+                src="/images/logo/buyology-logo-black.svg"
+                alt="Buyology"
+                width={220}
+                height={46}
+                className="h-11 w-auto dark:hidden"
+                priority
+                unoptimized
               />
-              <h1 className="mt-3 text-2xl font-bold text-white">
-                AzTU<span className="text-accent-300"> Support</span>
-              </h1>
-              <p className="mt-1 text-sm text-white/60">
-                Azerbaijan Technical University · IT Support
+              <Image
+                src="/images/logo/buyology-logo-white.svg"
+                alt="Buyology"
+                width={220}
+                height={46}
+                className="hidden h-11 w-auto dark:block"
+                priority
+                unoptimized
+              />
+              <p className="mt-4 font-mono text-xs uppercase tracking-[0.25em] text-accent-600 dark:text-accent-400">
+                Customer Support
+              </p>
+              <p className="mt-2 text-sm text-gray-500 dark:text-white/60">
+                Certified Refurbished Electronics
               </p>
             </div>
-            <div className="rounded-3xl border border-white/10 bg-white p-6 shadow-2xl dark:bg-gray-900 sm:p-8">
-              {children}
+
+            {/* Terminal-window card */}
+            <div className="glow-warm overflow-hidden rounded-2xl border border-gray-200 bg-white/80 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-gray-900/70">
+              <div className="flex items-center gap-2 border-b border-gray-200 px-4 py-3 dark:border-white/10">
+                <span className="h-3 w-3 rounded-full bg-accent-500" />
+                <span className="h-3 w-3 rounded-full bg-gold-500" />
+                <span className="h-3 w-3 rounded-full bg-success-500" />
+                <span className="ml-2 font-mono text-xs text-gray-400 dark:text-white/50">
+                  ~/buyology/auth
+                </span>
+              </div>
+              <div className="bg-white p-6 dark:bg-gray-900 sm:p-8">{children}</div>
             </div>
           </div>
         </div>

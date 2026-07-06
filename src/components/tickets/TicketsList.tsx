@@ -83,7 +83,7 @@ export default function TicketsList() {
         action={
           <Link
             href="/tickets/new"
-            className="rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600"
+            className="rounded-xl bg-accent-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-accent-500 dark:bg-accent-500/[0.14] dark:text-accent-200 dark:ring-1 dark:ring-inset dark:ring-accent-400/25 dark:hover:bg-accent-500/[0.22]"
           >
             + Open ticket
           </Link>
@@ -120,7 +120,7 @@ export default function TicketsList() {
             type="checkbox"
             checked={mine}
             onChange={(e) => setMine(e.target.checked)}
-            className="h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500"
+            className="h-4 w-4 rounded border-gray-300 text-accent-500 focus:ring-accent-500"
           />
           Only tickets I opened
         </label>
@@ -156,7 +156,7 @@ export default function TicketsList() {
                         <span className="block font-medium text-gray-800 dark:text-white/90">
                           {t.subject}
                         </span>
-                        <span className="text-xs text-gray-400">{t.ticketNumber}</span>
+                        <span className="font-mono text-xs text-accent-600 dark:text-accent-400/80">{t.ticketNumber}</span>
                       </Link>
                     </td>
                     <td className="px-5 py-4 text-gray-600 dark:text-gray-300">{t.platformName ?? "—"}</td>
@@ -195,14 +195,14 @@ export default function TicketsList() {
             <button
               disabled={data.first}
               onClick={() => setPage((p) => Math.max(0, p - 1))}
-              className="rounded-lg border border-gray-300 px-3 py-1.5 disabled:opacity-40 dark:border-gray-700"
+              className="rounded-xl border border-gray-300 px-3 py-1.5 disabled:opacity-40 dark:border-gray-700"
             >
               Previous
             </button>
             <button
               disabled={data.last}
               onClick={() => setPage((p) => p + 1)}
-              className="rounded-lg border border-gray-300 px-3 py-1.5 disabled:opacity-40 dark:border-gray-700"
+              className="rounded-xl border border-gray-300 px-3 py-1.5 disabled:opacity-40 dark:border-gray-700"
             >
               Next
             </button>

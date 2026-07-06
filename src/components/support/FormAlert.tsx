@@ -12,7 +12,7 @@ export default function FormAlert({
   }[type];
 
   return (
-    <div className={`rounded-lg px-4 py-3 text-sm ${styles}`} role="alert">
+    <div className={`rounded-xl px-4 py-3 font-mono text-[13px] ${styles}`} role="alert">
       {message}
     </div>
   );

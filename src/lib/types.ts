@@ -1,4 +1,4 @@
-// Shared API types — mirror the AzTU Support backend DTOs.
+// Shared API types — mirror the Buyology Support backend DTOs.
 
 export type RoleName = "USER" | "SUPPORT_TEAM" | "ADMIN" | "SUPER_ADMIN";
 

@@ -1,4 +1,4 @@
-// Lightweight fetch-based API client for the AzTU Support backend.
+// Lightweight fetch-based API client for the Buyology Support backend.
 // Handles JWT access/refresh tokens with a single-flight refresh + one retry.
 
 import { AuthResponse } from "./types";

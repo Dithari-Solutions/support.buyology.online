@@ -4,7 +4,11 @@
 
 @theme {
   --font-*: initial;
-  --font-outfit: Outfit, sans-serif;
+  /* Buyology brand typeface — Raleway (loaded via next/font as --font-raleway) */
+  --font-outfit: var(--font-raleway), Raleway, Arial, sans-serif;
+  /* Developer-console monospace — JetBrains Mono (IDs, labels, prompts, metrics) */
+  --font-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, SFMono-Regular,
+    Menlo, monospace;
 
   --breakpoint-*: initial;
   --breakpoint-2xsm: 375px;
@@ -38,32 +42,45 @@
   --color-white: #ffffff;
   --color-black: #101828;
 
-  /* AzTU brand — navy shield (#1b2354) primary, sky-blue (#5297d4) accent */
-  --color-brand-25: #f3f5fb;
-  --color-brand-50: #eaeef8;
-  --color-brand-100: #d3dcf1;
-  --color-brand-200: #a7b6e1;
-  --color-brand-300: #7b90cf;
-  --color-brand-400: #4f6bbb;
-  --color-brand-500: #2f4795;
-  --color-brand-600: #24397e;
-  --color-brand-700: #1f3068;
-  --color-brand-800: #1b2354;
-  --color-brand-900: #161d45;
-  --color-brand-950: #0f1430;
+  /* Buyology brand — deep indigo-purple (#402f75) primary, gold wave accent */
+  --color-brand-25: #f7f6fc;
+  --color-brand-50: #efecf8;
+  --color-brand-100: #ded8f1;
+  --color-brand-200: #c2b7e6;
+  --color-brand-300: #a08fd6;
+  --color-brand-400: #7d67c3;
+  --color-brand-500: #5f45ac;
+  --color-brand-600: #4e3a90;
+  --color-brand-700: #402f75;
+  --color-brand-800: #362763;
+  --color-brand-900: #2a1e4c;
+  --color-brand-950: #1b1330;
 
-  /* AzTU secondary — sky blue accent */
-  --color-accent-25: #f4f9fd;
-  --color-accent-50: #e9f2fb;
-  --color-accent-100: #cfe3f6;
-  --color-accent-200: #a6ccee;
-  --color-accent-300: #7db4e5;
-  --color-accent-400: #5297d4;
-  --color-accent-500: #3a7ec0;
-  --color-accent-600: #2f66a0;
-  --color-accent-700: #274f7c;
-  --color-accent-800: #21405f;
-  --color-accent-900: #1b3049;
+  /* Buyology secondary — coral accent (#ff7e5d, the storefront hero colour) */
+  --color-accent-25: #fff6f3;
+  --color-accent-50: #ffeee8;
+  --color-accent-100: #ffd9cd;
+  --color-accent-200: #ffbda8;
+  --color-accent-300: #ff9d7f;
+  --color-accent-400: #ff8a66;
+  --color-accent-500: #ff7e5d;
+  --color-accent-600: #f2562f;
+  --color-accent-700: #c9401d;
+  --color-accent-800: #9e3419;
+  --color-accent-900: #7c2c18;
+
+  /* Buyology gold — the wave-mark highlight (#ffbe12) */
+  --color-gold-25: #fffcf2;
+  --color-gold-50: #fff8e0;
+  --color-gold-100: #ffefb8;
+  --color-gold-200: #ffe285;
+  --color-gold-300: #ffd452;
+  --color-gold-400: #ffc62e;
+  --color-gold-500: #ffbe12;
+  --color-gold-600: #e0a000;
+  --color-gold-700: #b47c00;
+  --color-gold-800: #8a5e06;
+  --color-gold-900: #6e4a0b;
 
   --color-blue-light-25: #f5fbff;
   --color-blue-light-50: #f0f9ff;
@@ -87,10 +104,11 @@
   --color-gray-500: #667085;
   --color-gray-600: #475467;
   --color-gray-700: #344054;
-  --color-gray-800: #1d2939;
-  --color-gray-900: #101828;
-  --color-gray-950: #0c111d;
-  --color-gray-dark: #1a2231;
+  /* Dark end retuned to a warm-neutral charcoal for the developer console */
+  --color-gray-800: #23242c;
+  --color-gray-900: #0f0f14;
+  --color-gray-950: #08080b;
+  --color-gray-dark: #14141a;
 
   --color-orange-25: #fffaf5;
   --color-orange-50: #fff6ed;
@@ -162,7 +180,7 @@
     0px 20px 24px -4px rgba(16, 24, 40, 0.08),
     0px 8px 8px -4px rgba(16, 24, 40, 0.03);
   --shadow-datepicker: -5px 0 0 #262d3c, 5px 0 0 #262d3c;
-  --shadow-focus-ring: 0px 0px 0px 4px rgba(70, 95, 255, 0.12);
+  --shadow-focus-ring: 0px 0px 0px 4px rgba(255, 126, 93, 0.18);
   --shadow-slider-navigation:
     0px 1px 2px 0px rgba(16, 24, 40, 0.1), 0px 1px 3px 0px rgba(16, 24, 40, 0.1);
   --shadow-tooltip:
@@ -207,23 +225,23 @@
 }
 
 @utility menu-item {
-  @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm;
+  @apply relative flex items-center w-full gap-3 px-3 py-2.5 font-medium rounded-xl text-theme-sm font-mono tracking-tight transition-colors duration-150;
 }
 
 @utility menu-item-active {
-  @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
+  @apply bg-accent-500/10 text-accent-700 dark:bg-accent-500/[0.12] dark:text-accent-300;
 }
 
 @utility menu-item-inactive {
-  @apply text-gray-700 hover:bg-gray-100 group-hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300;
+  @apply text-gray-600 hover:bg-gray-100 group-hover:text-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.04] dark:hover:text-white;
 }
 
 @utility menu-item-icon {
-  @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400;
+  @apply text-gray-400 group-hover:text-gray-700 dark:text-gray-500 dark:group-hover:text-gray-300;
 }
 
 @utility menu-item-icon-active {
-  @apply text-brand-500 dark:text-brand-400;
+  @apply text-accent-600 dark:text-accent-400;
 }
 
 @utility menu-item-icon-inactive {
@@ -235,7 +253,7 @@
 }
 
 @utility menu-item-arrow-active {
-  @apply rotate-180 text-brand-500 dark:text-brand-400;
+  @apply rotate-180 text-accent-600 dark:text-accent-400;
 }
 
 @utility menu-item-arrow-inactive {
@@ -247,7 +265,7 @@
 }
 
 @utility menu-dropdown-item-active {
-  @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
+  @apply bg-accent-500/10 text-accent-700 dark:bg-accent-500/[0.12] dark:text-accent-300;
 }
 
 @utility menu-dropdown-item-inactive {
@@ -255,7 +273,7 @@
 }
 
 @utility menu-dropdown-badge {
-  @apply block rounded-full px-2.5 py-0.5 text-xs font-medium uppercase text-brand-500 dark:text-brand-400;
+  @apply block rounded-full px-2.5 py-0.5 text-xs font-medium uppercase text-accent-600 dark:text-accent-400;
 }
 
 @utility menu-dropdown-badge-active {
@@ -351,7 +369,7 @@
 
 .flatpickr-months .flatpickr-prev-month:hover svg,
 .flatpickr-months .flatpickr-next-month:hover svg {
-  @apply stroke-brand-500;
+  @apply stroke-accent-500;
 }
 .flatpickr-calendar.arrowTop:before,
 .flatpickr-calendar.arrowTop:after {
@@ -481,13 +499,13 @@ span.flatpickr-weekday,
 .flatpickr-day.selected.nextMonthDay,
 .flatpickr-day.startRange.nextMonthDay,
 .flatpickr-day.endRange.nextMonthDay {
-  background: #465fff;
-  @apply !border-brand-500 !bg-brand-500 hover:!border-brand-50 hover:!bg-brand-500;
+  background: #f2562f;
+  @apply !border-accent-500 !bg-accent-500 hover:!border-accent-50 hover:!bg-accent-500;
 }
 .flatpickr-day.selected.startRange + .endRange:not(:nth-child(7n + 1)),
 .flatpickr-day.startRange.startRange + .endRange:not(:nth-child(7n + 1)),
 .flatpickr-day.endRange.startRange + .endRange:not(:nth-child(7n + 1)) {
-  box-shadow: -10px 0 0 #465fff;
+  box-shadow: -10px 0 0 #f2562f;
 }
 
 .flatpickr-months .flatpickr-prev-month svg,
@@ -740,17 +758,17 @@ span.flatpickr-weekday,
 }
 
 .form-check-input:checked ~ span {
-  @apply border-[6px] border-brand-500 bg-brand-500 dark:border-brand-500;
+  @apply border-[6px] border-accent-500 bg-accent-500 dark:border-accent-500;
 }
 
 .taskCheckbox:checked ~ .box span {
-  @apply opacity-100 bg-brand-500;
+  @apply opacity-100 bg-accent-500;
 }
 .taskCheckbox:checked ~ p {
   @apply text-gray-400 line-through;
 }
 .taskCheckbox:checked ~ .box {
-  @apply border-brand-500 bg-brand-500 dark:border-brand-500;
+  @apply border-accent-500 bg-accent-500 dark:border-accent-500;
 }
 
 .task {
@@ -794,4 +812,69 @@ span.flatpickr-weekday,
   .parallax-layer {
     transform: none !important;
   }
+}
+
+/* ── Developer-console theme helpers ───────────────────────────────────────── */
+
+/* Warm text selection */
+::selection {
+  background-color: rgba(255, 126, 93, 0.28);
+  color: #fff;
+}
+
+/* Refined, rounded scrollbar for the dark console */
+.dark ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #2a2a33;
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #3a3a45;
+  background-clip: content-box;
+}
+.dark ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Blinking terminal caret */
+@keyframes term-blink {
+  0%,
+  55% {
+    opacity: 1;
+  }
+  56%,
+  100% {
+    opacity: 0;
+  }
+}
+.term-caret {
+  display: inline-block;
+  width: 0.5em;
+  animation: term-blink 1.15s steps(1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .term-caret {
+    animation: none;
+  }
+}
+
+/* Subtle dotted-grid backdrop for panels and heroes */
+@utility dotgrid {
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+/* Warm ambient glow used behind key panels */
+@utility glow-warm {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 20px 60px -20px rgba(255, 126, 93, 0.18);
 }

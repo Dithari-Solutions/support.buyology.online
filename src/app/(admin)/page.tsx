@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { api } from "@/lib/api";
@@ -29,19 +29,6 @@ export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [recent, setRecent] = useState<TicketSummary[]>([]);
   const [loading, setLoading] = useState(true);
-  const heroIconsRef = useRef<HTMLDivElement>(null);
-
-  const onHeroMove = (e: React.MouseEvent<HTMLElement>) => {
-    const r = e.currentTarget.getBoundingClientRect();
-    const mx = (e.clientX - r.left) / r.width - 0.5;
-    const my = (e.clientY - r.top) / r.height - 0.5;
-    heroIconsRef.current?.style.setProperty("--mx", mx.toFixed(3));
-    heroIconsRef.current?.style.setProperty("--my", my.toFixed(3));
-  };
-  const onHeroLeave = () => {
-    heroIconsRef.current?.style.setProperty("--mx", "0");
-    heroIconsRef.current?.style.setProperty("--my", "0");
-  };
 
   useEffect(() => {
     (async () => {
@@ -85,79 +72,40 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <div
-        onMouseMove={onHeroMove}
-        onMouseLeave={onHeroLeave}
-        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-900 via-brand-800 to-brand-600 p-6 text-white shadow-theme-lg sm:p-8"
-      >
-        {/* glow blobs */}
-        <div className="pointer-events-none absolute -right-10 -top-16 h-56 w-56 rounded-full bg-accent-400/30 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-24 left-1/3 h-56 w-56 rounded-full bg-brand-400/20 blur-3xl" />
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.12]"
-          style={{
-            backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
-            backgroundSize: "22px 22px",
-          }}
-        />
+      {/* ── Hero — terminal greeting ─────────────────────────────────────── */}
+      <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/10 dark:bg-gray-900 sm:p-8">
+        <div className="dotgrid pointer-events-none absolute inset-0 opacity-60" />
+        <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-accent-500/10 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 left-1/4 h-56 w-56 rounded-full bg-brand-500/10 blur-3xl" />
 
-        <div className="relative flex items-center justify-between gap-6">
-          <div className="max-w-xl">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/80 ring-1 ring-white/20">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent-300" /> AzTU IT Support
+        <div className="relative">
+          <span className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-3 py-1 font-mono text-[11px] text-gray-500 dark:border-white/10 dark:bg-white/[0.03] dark:text-gray-400">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success-500 opacity-60" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-success-500" />
             </span>
-            <h1 className="mt-3 text-2xl font-bold sm:text-3xl">
-              Welcome back, {user?.firstName} 👋
-            </h1>
-            <p className="mt-2 text-sm text-white/70">
-              Track your tickets, get help from the support team and stay on top of every update.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link
-                href="/tickets/new"
-                className="rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-brand-800 shadow-sm transition hover:bg-white/90"
-              >
-                + Open a ticket
-              </Link>
-              <Link
-                href="/tickets"
-                className="rounded-xl border border-white/30 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20"
-              >
-                View tickets
-              </Link>
-            </div>
-          </div>
-
-          {/* floating + parallax 3D icon cluster */}
-          <div ref={heroIconsRef} className="relative hidden h-44 w-44 shrink-0 md:block">
-            <div
-              className="parallax-layer absolute left-1/2 top-1/2"
-              style={{
-                transform:
-                  "translate(-50%,-50%) translate(calc(var(--mx,0) * 14px), calc(var(--my,0) * 14px))",
-              }}
+            session active
+          </span>
+          <h1 className="mt-4 font-mono text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl">
+            <span className="text-accent-500">$</span> welcome back, {user?.firstName}
+            <span className="term-caret text-accent-400">▍</span>
+          </h1>
+          <p className="mt-2 max-w-xl text-sm text-gray-500 dark:text-gray-400">
+            Track your tickets, get help from the support team and stay on top of every update.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link
+              href="/tickets/new"
+              className="rounded-xl bg-accent-600 px-5 py-2.5 font-mono text-sm font-semibold text-white transition hover:bg-accent-500 dark:bg-accent-500/[0.14] dark:text-accent-200 dark:ring-1 dark:ring-inset dark:ring-accent-400/25 dark:hover:bg-accent-500/[0.22] dark:hover:text-accent-100"
             >
-              <Icon3D name="rocket" tone="accent" size={96} float delay={0} />
-            </div>
-            <div
-              className="parallax-layer absolute left-0 top-3"
-              style={{
-                transform:
-                  "rotate(-8deg) translate(calc(var(--mx,0) * 26px), calc(var(--my,0) * 26px))",
-              }}
+              + open a ticket
+            </Link>
+            <Link
+              href="/tickets"
+              className="rounded-xl border border-gray-300 px-5 py-2.5 font-mono text-sm font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-white/10 dark:text-gray-300 dark:hover:bg-white/[0.04]"
             >
-              <Icon3D name="chip" tone="cyan" size={46} float delay={0.6} />
-            </div>
-            <div
-              className="parallax-layer absolute bottom-1 right-0"
-              style={{
-                transform:
-                  "rotate(10deg) translate(calc(var(--mx,0) * 20px), calc(var(--my,0) * 20px))",
-              }}
-            >
-              <Icon3D name="shieldCheck" tone="violet" size={50} float delay={1.1} />
-            </div>
+              view tickets
+            </Link>
           </div>
         </div>
       </div>
@@ -173,10 +121,10 @@ export default function DashboardPage() {
             <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-brand-500/5 blur-2xl transition group-hover:bg-brand-500/10" />
             <div className="relative">
               <Icon3D name={t.icon} tone={t.tone} size={52} float delay={(i % 4) * 0.3} />
-              <p className="mt-4 text-3xl font-bold tracking-tight text-gray-800 dark:text-white/90">
+              <p className="mt-4 font-mono text-3xl font-bold tracking-tight text-gray-800 dark:text-white/90">
                 {t.value}
               </p>
-              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{t.label}</p>
+              <p className="mt-1 font-mono text-xs lowercase tracking-tight text-gray-500 dark:text-gray-400">{t.label}</p>
             </div>
           </Link>
         ))}
@@ -188,7 +136,7 @@ export default function DashboardPage() {
         <div className="rounded-2xl border border-gray-200 bg-white p-2 dark:border-gray-800 dark:bg-white/[0.03] lg:col-span-2">
           <div className="flex items-center justify-between px-4 py-3">
             <h2 className="font-semibold text-gray-800 dark:text-white/90">Recent tickets</h2>
-            <Link href="/tickets" className="text-sm font-medium text-brand-500 hover:text-brand-600">
+            <Link href="/tickets" className="text-sm font-medium text-accent-600 hover:text-accent-500 dark:text-accent-400 dark:hover:text-accent-300 font-mono">
               View all
             </Link>
           </div>
@@ -197,7 +145,7 @@ export default function DashboardPage() {
               <Icon3D name="ticket" tone="brand" size={56} className="mx-auto" />
               <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
                 No tickets yet.{" "}
-                <Link href="/tickets/new" className="font-medium text-brand-500">
+                <Link href="/tickets/new" className="font-medium text-accent-600 dark:text-accent-400">
                   Open your first ticket
                 </Link>
                 .
@@ -212,7 +160,7 @@ export default function DashboardPage() {
                     className="flex flex-col gap-2 rounded-xl px-4 py-3 transition hover:bg-gray-50 dark:hover:bg-white/[0.04] sm:flex-row sm:items-center sm:justify-between"
                   >
                     <div className="flex min-w-0 items-center gap-3">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-xs font-semibold text-brand-600 dark:bg-brand-500/15 dark:text-brand-300">
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gray-50 font-mono text-xs font-semibold text-accent-600 ring-1 ring-gray-200 dark:bg-white/[0.03] dark:text-accent-300 dark:ring-white/10">
                         {t.ticketNumber.replace("AZTU-", "#").slice(0, 5)}
                       </span>
                       <div className="min-w-0">

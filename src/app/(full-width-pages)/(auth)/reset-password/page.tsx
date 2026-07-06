@@ -3,8 +3,8 @@ import { Metadata } from "next";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Reset Password | AzTU Support",
-  description: "Set a new AzTU Support password",
+  title: "Reset Password | Buyology Support",
+  description: "Set a new Buyology Support password",
 };
 
 export default function ResetPassword() {

@@ -166,7 +166,7 @@ export default function OpenTicketForm() {
               type="file"
               multiple
               onChange={(e) => setFiles(e.target.files)}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:rounded-lg file:border-0 file:bg-brand-50 file:px-4 file:py-2.5 file:text-sm file:font-medium file:text-brand-700 hover:file:bg-brand-100 dark:text-gray-400 dark:file:bg-brand-500/10 dark:file:text-brand-300"
+              className="block w-full text-sm text-gray-500 file:mr-4 file:rounded-xl file:border-0 file:bg-accent-50 file:px-4 file:py-2.5 file:text-sm file:font-medium file:text-accent-700 hover:file:bg-accent-100 dark:text-gray-400 dark:file:bg-accent-500/10 dark:file:text-accent-300"
             />
           </div>
         </div>

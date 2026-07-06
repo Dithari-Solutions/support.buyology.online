@@ -1,11 +1,8 @@
-import SignUpForm from "@/components/auth/SignUpForm";
-import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Sign Up | AzTU Support",
-  description: "Register for the AzTU Support portal",
-};
-
+// Public self-registration is disabled — accounts are created by a
+// super admin under Admin → Users & roles. Any hit to /signup is
+// bounced to the sign-in screen.
 export default function SignUp() {
-  return <SignUpForm />;
+  redirect("/signin");
 }
