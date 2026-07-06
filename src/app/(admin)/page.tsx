@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { api } from "@/lib/api";
@@ -29,6 +29,19 @@ export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [recent, setRecent] = useState<TicketSummary[]>([]);
   const [loading, setLoading] = useState(true);
+  const heroIconsRef = useRef<HTMLDivElement>(null);
+
+  const onHeroMove = (e: React.MouseEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    const mx = (e.clientX - r.left) / r.width - 0.5;
+    const my = (e.clientY - r.top) / r.height - 0.5;
+    heroIconsRef.current?.style.setProperty("--mx", mx.toFixed(3));
+    heroIconsRef.current?.style.setProperty("--my", my.toFixed(3));
+  };
+  const onHeroLeave = () => {
+    heroIconsRef.current?.style.setProperty("--mx", "0");
+    heroIconsRef.current?.style.setProperty("--my", "0");
+  };
 
   useEffect(() => {
     (async () => {
@@ -73,7 +86,11 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-900 via-brand-800 to-brand-600 p-6 text-white shadow-theme-lg sm:p-8">
+      <div
+        onMouseMove={onHeroMove}
+        onMouseLeave={onHeroLeave}
+        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-900 via-brand-800 to-brand-600 p-6 text-white shadow-theme-lg sm:p-8"
+      >
         {/* glow blobs */}
         <div className="pointer-events-none absolute -right-10 -top-16 h-56 w-56 rounded-full bg-accent-400/30 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 left-1/3 h-56 w-56 rounded-full bg-brand-400/20 blur-3xl" />
@@ -112,16 +129,34 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* floating 3D icon cluster */}
-          <div className="relative hidden h-40 w-40 shrink-0 md:block">
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-              <Icon3D name="rocket" tone="accent" size={96} />
+          {/* floating + parallax 3D icon cluster */}
+          <div ref={heroIconsRef} className="relative hidden h-44 w-44 shrink-0 md:block">
+            <div
+              className="parallax-layer absolute left-1/2 top-1/2"
+              style={{
+                transform:
+                  "translate(-50%,-50%) translate(calc(var(--mx,0) * 14px), calc(var(--my,0) * 14px))",
+              }}
+            >
+              <Icon3D name="rocket" tone="accent" size={96} float delay={0} />
             </div>
-            <div className="absolute -left-2 top-2 rotate-[-8deg]">
-              <Icon3D name="ticket" tone="cyan" size={46} />
+            <div
+              className="parallax-layer absolute left-0 top-3"
+              style={{
+                transform:
+                  "rotate(-8deg) translate(calc(var(--mx,0) * 26px), calc(var(--my,0) * 26px))",
+              }}
+            >
+              <Icon3D name="chip" tone="cyan" size={46} float delay={0.6} />
             </div>
-            <div className="absolute bottom-0 right-0 rotate-[10deg]">
-              <Icon3D name="shieldCheck" tone="violet" size={50} />
+            <div
+              className="parallax-layer absolute bottom-1 right-0"
+              style={{
+                transform:
+                  "rotate(10deg) translate(calc(var(--mx,0) * 20px), calc(var(--my,0) * 20px))",
+              }}
+            >
+              <Icon3D name="shieldCheck" tone="violet" size={50} float delay={1.1} />
             </div>
           </div>
         </div>
@@ -129,7 +164,7 @@ export default function DashboardPage() {
 
       {/* ── Stat tiles ───────────────────────────────────────────────────── */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {tiles.map((t) => (
+        {tiles.map((t, i) => (
           <Link
             key={t.label}
             href={t.href}
@@ -137,7 +172,7 @@ export default function DashboardPage() {
           >
             <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-brand-500/5 blur-2xl transition group-hover:bg-brand-500/10" />
             <div className="relative">
-              <Icon3D name={t.icon} tone={t.tone} size={52} />
+              <Icon3D name={t.icon} tone={t.tone} size={52} float delay={(i % 4) * 0.3} />
               <p className="mt-4 text-3xl font-bold tracking-tight text-gray-800 dark:text-white/90">
                 {t.value}
               </p>

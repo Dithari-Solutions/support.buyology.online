@@ -55,9 +55,9 @@ export default function SignUpForm() {
 
   if (done) {
     return (
-      <div className="flex w-full flex-1 flex-col lg:w-1/2">
+      <div className="w-full">
         <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
-          <div className="rounded-2xl border border-gray-200 p-8 text-center dark:border-gray-800">
+          <div className="text-center">
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-success-50 text-2xl dark:bg-success-500/10">
               ✅
             </div>
@@ -82,7 +82,7 @@ export default function SignUpForm() {
   }
 
   return (
-    <div className="flex w-full flex-1 flex-col lg:w-1/2">
+    <div className="w-full">
       <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-8">
         <div className="mb-6">
           <h1 className="mb-2 text-title-sm font-semibold text-gray-800 dark:text-white/90 sm:text-title-md">

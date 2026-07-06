@@ -764,3 +764,34 @@ span.flatpickr-weekday,
   opacity: 0.8;
   cursor: grabbing; /* Changes the cursor to indicate dragging */
 }
+
+/* ── Floating 3D icons ─────────────────────────────────────────────────────── */
+@keyframes icon3d-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+.animate-float {
+  animation: icon3d-bob 3.6s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Parallax layers in the hero react to pointer movement via --mx / --my. */
+.parallax-layer {
+  transition: transform 0.15s ease-out;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float {
+    animation: none;
+  }
+  .parallax-layer {
+    transform: none !important;
+  }
+}

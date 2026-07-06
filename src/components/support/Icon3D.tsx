@@ -14,7 +14,13 @@ export type Icon3DName =
   | "hourglass"
   | "gauge"
   | "chip"
-  | "layers";
+  | "layers"
+  | "code"
+  | "terminal"
+  | "database"
+  | "branch"
+  | "cloud"
+  | "bug";
 
 export type Icon3DTone =
   | "brand"
@@ -122,6 +128,49 @@ const GLYPHS: Record<Icon3DName, ReactNode> = {
       <path d="m22 17.5-9.17 4.16a2 2 0 0 1-1.66 0L2 17.5" />
     </>
   ),
+  code: (
+    <>
+      <path d="m16 18 6-6-6-6" />
+      <path d="m8 6-6 6 6 6" />
+    </>
+  ),
+  terminal: (
+    <>
+      <path d="m4 17 6-6-6-6" />
+      <path d="M12 19h8" />
+    </>
+  ),
+  database: (
+    <>
+      <ellipse cx="12" cy="5" rx="9" ry="3" />
+      <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+      <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3" />
+    </>
+  ),
+  branch: (
+    <>
+      <line x1="6" x2="6" y1="3" y2="15" />
+      <circle cx="18" cy="6" r="3" />
+      <circle cx="6" cy="18" r="3" />
+      <path d="M18 9a9 9 0 0 1-9 9" />
+    </>
+  ),
+  cloud: <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />,
+  bug: (
+    <>
+      <path d="m8 2 1.88 1.88" />
+      <path d="M14.12 3.88 16 2" />
+      <path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1" />
+      <path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6" />
+      <path d="M12 20v-9" />
+      <path d="M6.53 9C4.6 8.8 3 7.1 3 5" />
+      <path d="M6 13H2" />
+      <path d="M3 21c0-2.1 1.7-3.9 3.8-4" />
+      <path d="M20.97 5c0 2.1-1.6 3.8-3.5 4" />
+      <path d="M22 13h-4" />
+      <path d="M17.2 17c2.1.1 3.8 1.9 3.8 4" />
+    </>
+  ),
 };
 
 export default function Icon3D({
@@ -129,11 +178,17 @@ export default function Icon3D({
   tone = "brand",
   size = 54,
   className = "",
+  float = false,
+  delay = 0,
 }: {
   name: Icon3DName;
   tone?: Icon3DTone;
   size?: number;
   className?: string;
+  /** Continuously bob up and down. */
+  float?: boolean;
+  /** Animation start offset in seconds (stagger multiple icons). */
+  delay?: number;
 }) {
   const raw = useId().replace(/:/g, "");
   const gid = `g-${raw}`;
@@ -142,8 +197,11 @@ export default function Icon3D({
 
   return (
     <span
-      className={`inline-flex ${className}`}
-      style={{ filter: `drop-shadow(0 8px 16px ${glow}5c)` }}
+      className={`inline-flex ${float ? "animate-float" : ""} ${className}`}
+      style={{
+        filter: `drop-shadow(0 8px 16px ${glow}5c)`,
+        animationDelay: float ? `${delay}s` : undefined,
+      }}
     >
       <svg width={size} height={size} viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>

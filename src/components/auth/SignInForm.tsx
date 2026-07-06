@@ -33,8 +33,8 @@ export default function SignInForm() {
   };
 
   return (
-    <div className="flex w-full flex-1 flex-col lg:w-1/2">
-      <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
+    <div className="w-full">
+      <div className="w-full">
         <div className="mb-6">
           <h1 className="mb-2 text-title-sm font-semibold text-gray-800 dark:text-white/90 sm:text-title-md">
             Sign In
