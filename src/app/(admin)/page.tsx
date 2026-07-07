@@ -161,7 +161,7 @@ export default function DashboardPage() {
                   >
                     <div className="flex min-w-0 items-center gap-3">
                       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gray-50 font-mono text-xs font-semibold text-accent-600 ring-1 ring-gray-200 dark:bg-white/[0.03] dark:text-accent-300 dark:ring-white/10">
-                        {t.ticketNumber.replace("AZTU-", "#").slice(0, 5)}
+                        {t.ticketNumber.replace(/^[A-Z]+-/, "#").slice(0, 5)}
                       </span>
                       <div className="min-w-0">
                         <p className="truncate font-medium text-gray-800 dark:text-white/90">

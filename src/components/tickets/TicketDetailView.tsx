@@ -2,14 +2,16 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { api, ApiError, API_URL, getAccessToken } from "@/lib/api";
-import { TicketDetail, TicketStatus, UserSummary } from "@/lib/types";
+import { Category, Platform, TicketDetail, TicketPriority, TicketStatus, UserSummary } from "@/lib/types";
 import { useAuth } from "@/context/AuthContext";
 import Badge from "@/components/support/Badge";
 import Spinner from "@/components/support/Spinner";
 import SelectField from "@/components/support/SelectField";
 import FormAlert from "@/components/support/FormAlert";
 import Button from "@/components/ui/button/Button";
+import Input from "@/components/form/input/InputField";
 import TextArea from "@/components/form/input/TextArea";
 import Label from "@/components/form/Label";
 import {
@@ -27,6 +29,11 @@ const STATUS_OPTIONS = (
   ["OPEN", "IN_PROGRESS", "RESOLVED", "CLOSED_WITHOUT_RESOLVE", "REJECTED"] as TicketStatus[]
 ).map((s) => ({ value: s, label: TICKET_STATUS_LABEL[s] }));
 
+const PRIORITY_OPTIONS = (["LOW", "MEDIUM", "HIGH", "URGENT"] as TicketPriority[]).map((p) => ({
+  value: p,
+  label: PRIORITY_LABEL[p],
+}));
+
 function formatBytes(bytes: number | null): string {
   if (!bytes) return "";
   if (bytes < 1024) return `${bytes} B`;
@@ -35,12 +42,16 @@ function formatBytes(bytes: number | null): string {
 }
 
 export default function TicketDetailView({ ticketId }: { ticketId: number }) {
-  const { isAtLeast } = useAuth();
+  const router = useRouter();
+  const { user, isAtLeast } = useAuth();
   const support = isAtLeast("SUPPORT_TEAM");
+  const admin = isAtLeast("ADMIN");
 
   const [ticket, setTicket] = useState<TicketDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -70,6 +81,25 @@ export default function TicketDetailView({ ticketId }: { ticketId: number }) {
       </div>
     );
 
+  const owner = !!user && !!ticket.createdBy && user.id === ticket.createdBy.id;
+  const canEdit = support || (owner && !CLOSING_STATUSES.includes(ticket.status));
+
+  const deleteTicket = async () => {
+    if (
+      !confirm(
+        `Delete ticket ${ticket.ticketNumber}? This permanently removes it and all its replies and attachments. This cannot be undone.`
+      )
+    )
+      return;
+    setActionError(null);
+    try {
+      await api.del(`/api/tickets/${ticket.id}`);
+      router.push("/tickets");
+    } catch (err) {
+      setActionError(err instanceof ApiError ? err.message : "Unable to delete ticket.");
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -78,48 +108,85 @@ export default function TicketDetailView({ ticketId }: { ticketId: number }) {
         </Link>
       </div>
 
+      {actionError && <FormAlert type="error" message={actionError} />}
+
       {/* Header */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <p className="font-mono text-xs font-medium text-accent-600 dark:text-accent-400/80">{ticket.ticketNumber}</p>
-            <h1 className="mt-1 text-xl font-semibold text-gray-800 dark:text-white/90">
-              {ticket.subject}
-            </h1>
+      {editing ? (
+        <EditTicketForm
+          ticket={ticket}
+          onCancel={() => setEditing(false)}
+          onSaved={() => {
+            setEditing(false);
+            load();
+          }}
+        />
+      ) : (
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <p className="font-mono text-xs font-medium text-accent-600 dark:text-accent-400/80">{ticket.ticketNumber}</p>
+              <h1 className="mt-1 text-xl font-semibold text-gray-800 dark:text-white/90">
+                {ticket.subject}
+              </h1>
+            </div>
+            <div className="flex flex-col items-start gap-2 sm:items-end">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge tone={priorityTone(ticket.priority)}>{PRIORITY_LABEL[ticket.priority]}</Badge>
+                <Badge tone={ticketStatusTone(ticket.status)}>
+                  {TICKET_STATUS_LABEL[ticket.status]}
+                </Badge>
+              </div>
+              {(canEdit || admin) && (
+                <div className="flex gap-2">
+                  {canEdit && (
+                    <button
+                      type="button"
+                      onClick={() => setEditing(true)}
+                      className="rounded-xl border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 dark:border-white/10 dark:text-gray-300 dark:hover:bg-white/[0.04]"
+                    >
+                      Edit
+                    </button>
+                  )}
+                  {admin && (
+                    <button
+                      type="button"
+                      onClick={deleteTicket}
+                      className="rounded-xl border border-error-300 px-3 py-1.5 text-sm font-medium text-error-600 transition hover:bg-error-50 dark:border-error-500/30 dark:text-error-400 dark:hover:bg-error-500/10"
+                    >
+                      Delete
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge tone={priorityTone(ticket.priority)}>{PRIORITY_LABEL[ticket.priority]}</Badge>
-            <Badge tone={ticketStatusTone(ticket.status)}>
-              {TICKET_STATUS_LABEL[ticket.status]}
-            </Badge>
-          </div>
-        </div>
 
-        <dl className="mt-5 grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
-          <Meta label="Platform" value={ticket.platformName ?? "—"} />
-          <Meta label="Category" value={ticket.categoryName ?? "—"} />
-          <Meta label="Opened by" value={ticket.createdBy?.fullName ?? "—"} />
-          <Meta label="Assignee" value={ticket.assignedTo?.fullName ?? "Unassigned"} />
-          <Meta label="Created" value={formatDate(ticket.createdAt)} />
-          <Meta label="Last updated" value={formatDate(ticket.updatedAt)} />
-          {ticket.closedAt && <Meta label="Closed" value={formatDate(ticket.closedAt)} />}
-        </dl>
+          <dl className="mt-5 grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
+            <Meta label="Platform" value={ticket.platformName ?? "—"} />
+            <Meta label="Category" value={ticket.categoryName ?? "—"} />
+            <Meta label="Opened by" value={ticket.createdBy?.fullName ?? "—"} />
+            <Meta label="Assignee" value={ticket.assignedTo?.fullName ?? "Unassigned"} />
+            <Meta label="Created" value={formatDate(ticket.createdAt)} />
+            <Meta label="Last updated" value={formatDate(ticket.updatedAt)} />
+            {ticket.closedAt && <Meta label="Closed" value={formatDate(ticket.closedAt)} />}
+          </dl>
 
-        <div className="mt-5 border-t border-gray-100 pt-5 dark:border-gray-800">
-          <p className="whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300">
-            {ticket.description}
-          </p>
-        </div>
-
-        {ticket.resolutionNote && (
-          <div className="mt-4 rounded-xl bg-gray-50 p-4 dark:bg-white/[0.03]">
-            <p className="text-xs font-semibold uppercase text-gray-400">Resolution note</p>
-            <p className="mt-1 whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300">
-              {ticket.resolutionNote}
+          <div className="mt-5 border-t border-gray-100 pt-5 dark:border-gray-800">
+            <p className="whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300">
+              {ticket.description}
             </p>
           </div>
-        )}
-      </div>
+
+          {ticket.resolutionNote && (
+            <div className="mt-4 rounded-xl bg-gray-50 p-4 dark:bg-white/[0.03]">
+              <p className="text-xs font-semibold uppercase text-gray-400">Resolution note</p>
+              <p className="mt-1 whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300">
+                {ticket.resolutionNote}
+              </p>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Support controls */}
       {support && <SupportControls ticket={ticket} onChanged={load} />}
@@ -146,6 +213,130 @@ function Meta({ label, value }: { label: string; value: string }) {
       <dt className="text-xs uppercase text-gray-400">{label}</dt>
       <dd className="mt-0.5 text-gray-700 dark:text-gray-300">{value}</dd>
     </div>
+  );
+}
+
+// ── Edit ticket ───────────────────────────────────────────────────────────────
+
+function EditTicketForm({
+  ticket,
+  onCancel,
+  onSaved,
+}: {
+  ticket: TicketDetail;
+  onCancel: () => void;
+  onSaved: () => void;
+}) {
+  const [platforms, setPlatforms] = useState<Platform[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [platformId, setPlatformId] = useState(ticket.platformId ? String(ticket.platformId) : "");
+  const [categoryId, setCategoryId] = useState(ticket.categoryId ? String(ticket.categoryId) : "");
+  const [subject, setSubject] = useState(ticket.subject);
+  const [description, setDescription] = useState(ticket.description);
+  const [priority, setPriority] = useState<TicketPriority>(ticket.priority);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    api.get<Platform[]>("/api/platforms").then(setPlatforms).catch(() => setPlatforms([]));
+  }, []);
+
+  useEffect(() => {
+    if (!platformId) {
+      setCategories([]);
+      return;
+    }
+    api
+      .get<Category[]>(`/api/platforms/${platformId}/categories`)
+      .then(setCategories)
+      .catch(() => setCategories([]));
+  }, [platformId]);
+
+  const changePlatform = (v: string) => {
+    setPlatformId(v);
+    setCategoryId(""); // the category must belong to the selected platform
+  };
+
+  const save = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    if (!platformId || !subject.trim() || !description.trim()) {
+      setError("Platform, subject and description are required.");
+      return;
+    }
+    setBusy(true);
+    try {
+      await api.put(`/api/tickets/${ticket.id}`, {
+        platformId: Number(platformId),
+        categoryId: categoryId ? Number(categoryId) : null,
+        subject: subject.trim(),
+        description,
+        priority,
+      });
+      onSaved();
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "Unable to save changes.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <form
+      onSubmit={save}
+      className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]"
+    >
+      <h2 className="mb-4 font-semibold text-gray-800 dark:text-white/90">Edit ticket</h2>
+      {error && <div className="mb-4"><FormAlert type="error" message={error} /></div>}
+      <div className="space-y-4">
+        <div>
+          <Label>Subject</Label>
+          <Input value={subject} onChange={(e) => setSubject(e.target.value)} />
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div>
+            <Label>Platform</Label>
+            <SelectField
+              options={platforms.map((p) => ({ value: String(p.id), label: p.name }))}
+              value={platformId}
+              onChange={changePlatform}
+              placeholder="Select platform"
+            />
+          </div>
+          <div>
+            <Label>Category</Label>
+            <SelectField
+              options={[
+                { value: "", label: "None" },
+                ...categories.map((c) => ({ value: String(c.id), label: c.name })),
+              ]}
+              value={categoryId}
+              onChange={setCategoryId}
+            />
+          </div>
+          <div>
+            <Label>Priority</Label>
+            <SelectField
+              options={PRIORITY_OPTIONS}
+              value={priority}
+              onChange={(v) => setPriority(v as TicketPriority)}
+            />
+          </div>
+        </div>
+        <div>
+          <Label>Description</Label>
+          <TextArea rows={5} value={description} onChange={setDescription} />
+        </div>
+      </div>
+      <div className="mt-5 flex gap-3">
+        <Button type="submit" size="sm" disabled={busy}>
+          {busy ? "Saving…" : "Save changes"}
+        </Button>
+        <Button type="button" size="sm" variant="outline" onClick={onCancel}>
+          Cancel
+        </Button>
+      </div>
+    </form>
   );
 }
 

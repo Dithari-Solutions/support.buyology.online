@@ -5,8 +5,8 @@ import { AuthResponse } from "./types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
-const ACCESS_KEY = "aztu_access_token";
-const REFRESH_KEY = "aztu_refresh_token";
+const ACCESS_KEY = "buyology_access_token";
+const REFRESH_KEY = "buyology_refresh_token";
 
 export class ApiError extends Error {
   status: number;
