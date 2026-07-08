@@ -76,6 +76,22 @@ export default function KanbanBoard({ boardId }: { boardId: number }) {
     );
   if (!board) return <Spinner label="Loading board…" />;
 
+  const reorderColumn = async (draggedId: number, targetId: number) => {
+    const ids = board.columns.map((c) => c.id);
+    const from = ids.indexOf(draggedId);
+    const to = ids.indexOf(targetId);
+    if (from < 0 || to < 0 || from === to) return;
+    ids.splice(from, 1);
+    ids.splice(to, 0, draggedId);
+    setError(null);
+    try {
+      await api.patch(`/api/boards/${boardId}/columns/reorder`, { columnIds: ids });
+      await load();
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "Unable to reorder the columns.");
+    }
+  };
+
   return (
     <div>
       <div className="mb-5">
@@ -103,6 +119,7 @@ export default function KanbanBoard({ boardId }: { boardId: number }) {
               onOpenTask={setOpenTask}
               onChanged={load}
               onError={setError}
+              onReorderColumn={reorderColumn}
             />
           ))}
           {isAdmin && <AddColumn boardId={boardId} onChanged={load} onError={setError} />}
@@ -129,12 +146,14 @@ function Column({
   onOpenTask,
   onChanged,
   onError,
+  onReorderColumn,
 }: {
   column: BoardColumn;
   isAdmin: boolean;
   onOpenTask: (id: number) => void;
   onChanged: () => void;
   onError: (msg: string | null) => void;
+  onReorderColumn: (draggedId: number, targetId: number) => void;
 }) {
   const [adding, setAdding] = useState(false);
   const [title, setTitle] = useState("");
@@ -151,10 +170,24 @@ function Column({
     }
   };
 
+  // Columns are draggable (super admin only) to reorder them.
+  const [{ isDragging }, dragColumn, dragPreview] = useDrag(
+    () => ({
+      type: "COLUMN",
+      item: { id: column.id },
+      canDrag: isAdmin,
+      collect: (m) => ({ isDragging: m.isDragging() }),
+    }),
+    [column.id, isAdmin]
+  );
+
   const [{ isOver }, drop] = useDrop(
     () => ({
-      accept: "TASK",
-      drop: (item: { id: number }) => moveTask(item.id),
+      accept: ["TASK", "COLUMN"],
+      drop: (item: { id: number }, monitor) => {
+        if (monitor.getItemType() === "COLUMN") onReorderColumn(item.id, column.id);
+        else moveTask(item.id);
+      },
       collect: (m) => ({ isOver: m.isOver() }),
     }),
     [column.id]
@@ -198,8 +231,11 @@ function Column({
     <div
       ref={(node) => {
         drop(node);
+        dragPreview(node);
       }}
       className={`flex w-72 shrink-0 flex-col rounded-2xl border p-3 transition ${
+        isDragging ? "opacity-50" : ""
+      } ${
         isOver
           ? "border-accent-400 bg-accent-50/60 dark:border-accent-500/40 dark:bg-accent-500/[0.06]"
           : "border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-white/[0.02]"
@@ -216,7 +252,15 @@ function Column({
             className={INPUT_CLASS}
           />
         ) : (
-          <h3 className="flex items-center gap-2 font-mono text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-300">
+          <h3
+            ref={(node) => {
+              dragColumn(node);
+            }}
+            title={isAdmin ? "Drag to reorder" : undefined}
+            className={`flex items-center gap-2 font-mono text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-300 ${
+              isAdmin ? "cursor-grab" : ""
+            }`}
+          >
             {column.name}
             <span className="rounded-full bg-gray-200 px-2 text-xs text-gray-500 dark:bg-white/10 dark:text-gray-400">
               {column.tasks.length}
