@@ -166,4 +166,7 @@ export const NOTIFICATION_ICON: Record<NotificationType, string> = {
   REGISTRATION_APPROVED: "✅",
   REGISTRATION_REJECTED: "⛔",
   ROLE_CHANGED: "🛡️",
+  TASK_ASSIGNED: "📌",
+  TASK_MENTIONED: "💬",
+  TASK_COMMENTED: "🗒️",
 };

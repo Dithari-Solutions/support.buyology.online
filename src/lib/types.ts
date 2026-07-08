@@ -22,7 +22,10 @@ export type NotificationType =
   | "REGISTRATION_PENDING"
   | "REGISTRATION_APPROVED"
   | "REGISTRATION_REJECTED"
-  | "ROLE_CHANGED";
+  | "ROLE_CHANGED"
+  | "TASK_ASSIGNED"
+  | "TASK_MENTIONED"
+  | "TASK_COMMENTED";
 
 export interface User {
   id: number;
@@ -69,6 +72,63 @@ export interface Category {
   name: string;
   description: string | null;
   active: boolean;
+}
+
+// ── Kanban boards / tasks ────────────────────────────────────────────────────
+
+export interface BoardSummary {
+  id: number;
+  name: string;
+  description: string | null;
+  createdByName: string | null;
+  createdAt: string;
+}
+
+export interface TaskCard {
+  id: number;
+  columnId: number;
+  title: string;
+  priority: TicketPriority;
+  assignee: UserSummary | null;
+  dueDate: string | null;
+  position: number;
+  commentCount: number;
+}
+
+export interface BoardColumn {
+  id: number;
+  name: string;
+  position: number;
+  tasks: TaskCard[];
+}
+
+export interface BoardDetail {
+  id: number;
+  name: string;
+  description: string | null;
+  columns: BoardColumn[];
+}
+
+export interface TaskComment {
+  id: number;
+  author: UserSummary | null;
+  body: string;
+  createdAt: string;
+}
+
+export interface TaskDetail {
+  id: number;
+  boardId: number;
+  columnId: number;
+  title: string;
+  description: string | null;
+  priority: TicketPriority;
+  assignee: UserSummary | null;
+  dueDate: string | null;
+  createdBy: UserSummary | null;
+  createdAt: string;
+  updatedAt: string;
+  comments: TaskComment[];
 }
 
 export interface TicketSummary {

@@ -14,6 +14,7 @@ import {
   CheckCircleIcon,
   BoxCubeIcon,
   GroupIcon,
+  TaskIcon,
   HorizontaLDots,
 } from "../icons/index";
 
@@ -38,6 +39,7 @@ const mainItems: NavItem[] = [
   { name: "Dashboard", icon: <GridIcon />, path: "/" },
   { name: "Tickets", icon: <ListIcon />, path: "/tickets", matchPrefix: true },
   { name: "Open Ticket", icon: <PlusIcon />, path: "/tickets/new" },
+  { name: "Boards", icon: <TaskIcon />, path: "/boards", matchPrefix: true, atLeast: "SUPPORT_TEAM" },
   { name: "Notifications", icon: <BellIcon />, path: "/notifications" },
 ];
 
